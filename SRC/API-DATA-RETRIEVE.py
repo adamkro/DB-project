@@ -18,7 +18,7 @@ def get_winning_titles():
 
     headers = {
         'x-rapidapi-host': "imdb8.p.rapidapi.com",
-        'x-rapidapi-key': "150f682d97msh51191443c0a7f97p15f58fjsn85b98d4e5490"
+        'x-rapidapi-key': ""
         }
 
     response = requests.request("GET", url, headers=headers).json()
