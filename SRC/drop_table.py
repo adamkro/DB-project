@@ -11,7 +11,5 @@ db = mysql.connector.connect(
     )
 
 cursor = db.cursor()
-cursor.execute("DROP TABLE best_picture_winners")
+cursor.execute("DROP TABLE principal")
 db.commit()
-
-    
