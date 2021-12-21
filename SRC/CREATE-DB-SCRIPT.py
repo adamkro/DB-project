@@ -4,6 +4,7 @@ import numpy as np
 
 DB_NAME = "DbMysql11"
 
+# init connection
 db = mysql.connector.connect(
     host="localhost",
     port=3305,
@@ -14,13 +15,14 @@ db = mysql.connector.connect(
 
 cursor = db.cursor()
 
+# create table from csv
 def create_table(create_sql, table_name, cols):
     s = ("%s,"*cols)[:-1]
     df = pd.read_csv(f"./data/{table_name}.csv", index_col=False, delimiter = ',')
     df = df.where(df.notnull(), None)
     cursor.execute(create_sql)
     for i, row in df.iterrows():
-        # some rows doesn't match foreign key constrain
+        # some rows doesn't match foreign key constraint
         try:
             sql = f"INSERT INTO {table_name} VALUES ({s})"
             cursor.execute(sql, tuple(row))
@@ -45,9 +47,10 @@ def create_table_person():
 def create_table_principal():
     sql = "CREATE TABLE principal(movie_id VARCHAR(255),person_id VARCHAR(255),category VARCHAR(255),FOREIGN KEY (movie_id) REFERENCES movie(id), FOREIGN KEY (person_id) REFERENCES person(id))"
     create_table(sql, "principal", 3)
-    #cursoer.execute("ALTER TABLE principal ADD id INT PRIMARY KEY AUTO_INCREMENT")
+    cursor.execute("ALTER TABLE principal ADD id INT PRIMARY KEY AUTO_INCREMENT")
     db.commit()
 
+# special case - create genre table (split csv data)
 def create_table_genre():
     sql = "CREATE TABLE genre(movie_id VARCHAR(255),genre VARCHAR(255), FOREIGN KEY (movie_id) REFERENCES movie(id))"
     df = pd.read_csv(f"./data/genre.csv", index_col=False, delimiter = ',')
@@ -62,9 +65,11 @@ def create_table_genre():
     cursor.execute("ALTER TABLE genre ADD id INT PRIMARY KEY AUTO_INCREMENT")
     db.commit()
 
+# create index sql command generator
 def get_index_sql(name, table, field):
     return f"CREATE INDEX {name} ON {table}({field})"
 
+# create all indices
 def create_indicies():
     cursor.execute(get_index_sql('yearIndex', 'movie', 'year'))
     cursor.execute(get_index_sql('grossIndex', 'movie', 'usa_gross_income'))
@@ -76,4 +81,17 @@ def create_indicies():
     db.commit()
 
 
-create_table_genre()
+# create all db tables
+def init_db():
+    try:
+        create_table_movie()
+        create_table_person()
+        create_table_rating()
+        create_table_principal()
+        create_table_genre()
+    except: 
+        print("an error occurred")
+
+
+# init_db()
+    

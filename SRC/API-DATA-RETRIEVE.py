@@ -38,6 +38,8 @@ def create_table_best_picture_winners():
         cursor.execute(sql,(id,))
         db.commit()
 
-    # cursor.execute("SELECT * FROM best_picture_winners")
-    # for x in cursor:
-    #     print(x)
+
+try:
+    create_table_best_picture_winners()
+except: 
+    print("an error occurred")
