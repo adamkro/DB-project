@@ -78,6 +78,7 @@ def create_indicies():
     cursor.execute(get_index_sql('meanVoteIndex', 'rating', 'mean_vote'))
     cursor.execute(get_index_sql('genreIndex', 'genre', 'genre'))
     cursor.execute(get_index_sql('principalIndex', 'principal', 'category'))
+    cursor.execute(get_index_sql('personFullTextIndex', 'person', 'name'))
     db.commit()
 
 

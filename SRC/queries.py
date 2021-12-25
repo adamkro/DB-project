@@ -38,3 +38,42 @@ def query_3():
     ORDER BY    COUNT(G.genre) DESC
     LIMIT       10
     """
+
+def query_4(role):
+    return """
+    select person.name,count(movie_id) as numberOfBestPictureWinningMovieByHim
+    from principal,person
+    where category={role} and principal.person_id=person.id and exists (select * from best_picture_winners where best_picture_winners.id=principal.movie_id)
+    group by principal.person_id
+    order by count(movie_id) desc
+    limit 1;
+    """
+
+def query_5(income,vote,actors):
+    return """
+    select movie.title
+    from principal, movie,rating 
+    where movie.id=rating.id and rating.mean_vote>={vote} and principal.movie_id=movie.id and movie.usa_gross_income>={income} and (principal.category="actor" or principal.category="actress")
+    group by principal.movie_id
+    having count(principal.id)>={actors};
+    """
+
+def query_6(name):
+    return """
+    select movie.title,count(if(match(person.name) against ({name}),1, NULL)) as numOf
+    from person, movie,principal
+    where person.id=principal.person_id and movie.id=principal.movie_id and principal.category="actor"
+    group by movie.id
+    order by numOf desc;
+    """
+
+def query_7(country):
+    return """
+    select birthplace, count(id)
+    from person
+    where birthplace like '%{country}'
+    group by birthplace
+    having count(id)>0
+    order by count(id) desc;
+    """
+    
