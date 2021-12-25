@@ -40,7 +40,7 @@ def query_3():
     """
 
 def query_4(role):
-    return """
+    return f"""
     select person.name,count(movie_id) as numberOfBestPictureWinningMovieByHim
     from principal,person
     where category={role} and principal.person_id=person.id and exists (select * from best_picture_winners where best_picture_winners.id=principal.movie_id)
@@ -50,7 +50,7 @@ def query_4(role):
     """
 
 def query_5(income,vote,actors):
-    return """
+    return f"""
     select movie.title
     from principal, movie,rating 
     where movie.id=rating.id and rating.mean_vote>={vote} and principal.movie_id=movie.id and movie.usa_gross_income>={income} and (principal.category="actor" or principal.category="actress")
@@ -59,7 +59,7 @@ def query_5(income,vote,actors):
     """
 
 def query_6(name):
-    return """
+    return f"""
     select movie.title,count(if(match(person.name) against ({name}),1, NULL)) as numOf
     from person, movie,principal
     where person.id=principal.person_id and movie.id=principal.movie_id and principal.category="actor"
@@ -68,7 +68,7 @@ def query_6(name):
     """
 
 def query_7(country):
-    return """
+    return f"""
     select birthplace, count(id)
     from person
     where birthplace like '%{country}'
@@ -76,4 +76,3 @@ def query_7(country):
     having count(id)>0
     order by count(id) desc;
     """
-    
