@@ -71,15 +71,18 @@ def get_index_sql(name, table, field):
 
 # create all indices
 def create_indicies():
-    cursor.execute(get_index_sql('yearIndex', 'movie', 'year'))
-    cursor.execute(get_index_sql('grossIndex', 'movie', 'usa_gross_income'))
-    cursor.execute(get_index_sql('childrenIndex', 'person', 'children'))
-    cursor.execute(get_index_sql('totalVotesIndex', 'rating', 'total_votes'))
-    cursor.execute(get_index_sql('meanVoteIndex', 'rating', 'mean_vote'))
-    cursor.execute(get_index_sql('genreIndex', 'genre', 'genre'))
-    cursor.execute(get_index_sql('principalIndex', 'principal', 'category'))
-    cursor.execute(get_index_sql('personFullTextIndex', 'person', 'name'))
-    db.commit()
+    try:
+        cursor.execute(get_index_sql('yearIndex', 'movie', 'year'))
+        cursor.execute(get_index_sql('grossIndex', 'movie', 'usa_gross_income'))
+        cursor.execute(get_index_sql('childrenIndex', 'person', 'children'))
+        cursor.execute(get_index_sql('totalVotesIndex', 'rating', 'total_votes'))
+        cursor.execute(get_index_sql('meanVoteIndex', 'rating', 'mean_vote'))
+        cursor.execute(get_index_sql('genreIndex', 'genre', 'genre'))
+        cursor.execute(get_index_sql('principalIndex', 'principal', 'category'))
+        cursor.execute("CREATE FULLTEXT INDEX personFullTextIndex ON person(name)")
+        db.commit()
+    except: 
+        print("an error occurred")
 
 
 # create all db tables
@@ -94,5 +97,5 @@ def init_db():
         print("an error occurred")
 
 
-# init_db()
-    
+init_db()
+create_indicies()

@@ -11,12 +11,12 @@ https://www.w3schools.com/python/python_mysql_getstarted.asp
 
 
 Relations:  
-best_picture_winners(id)  
 movie(id, title, year, usa_gross_income)  
 person(id, name, birthplace, children)  
 principal(id, movie_id, person_id, category)  
 rating(id, total_votes, mean_vote)  
 genre(id, movie_id, genre)  
+best_picture_winners(id)  
 
 
 optimizations:  
@@ -25,3 +25,10 @@ index (movie.year, movie.usa_gross_income, person.children, rating.total_votes, 
 double index??  
 decomposition : BCNF/3NF?  
 views  
+
+docs:
+user manual - 
+https://docs.google.com/document/d/1iHAgeAqhueq_CUCANA3b48M6-zw8kG02uKyRaLDssx4/edit?usp=sharing
+
+software doc -
+https://docs.google.com/document/d/1YFJZs7mEXN0QNM-WpcxzZvYJjHp8pzfGWPKAeEIGqmo/edit?usp=sharing
