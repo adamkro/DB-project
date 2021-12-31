@@ -1,3 +1,18 @@
+import mysql.connector
+
+DB_NAME = "DbMysql11"
+
+# init connection
+db = mysql.connector.connect(
+    host="localhost",
+    port=3305,
+    user=DB_NAME,
+    password=DB_NAME,
+    database=DB_NAME
+    )
+
+cursor = db.cursor()
+
 
 def query_1(min_votes, year):
     return f"""
@@ -76,3 +91,12 @@ def query_7(country):
     having count(id)>0
     order by count(id) desc;
     """
+
+
+def get_query_result(sql):
+    cursor.execute(sql)
+    return cursor.fetchall()
+    
+
+cursor.close()
+db.close()

@@ -79,10 +79,12 @@ def create_indicies():
         cursor.execute(get_index_sql('meanVoteIndex', 'rating', 'mean_vote'))
         cursor.execute(get_index_sql('genreIndex', 'genre', 'genre'))
         cursor.execute(get_index_sql('principalIndex', 'principal', 'category'))
+        cursor.execute(get_index_sql('birthplace', 'person', 'birthplace'))
         cursor.execute("CREATE FULLTEXT INDEX personFullTextIndex ON person(name)")
         db.commit()
     except: 
         print("an error occurred")
+        db.rollback()
 
 
 # create all db tables
@@ -95,7 +97,28 @@ def init_db():
         create_table_genre()
     except: 
         print("an error occurred")
+        db.rollback()
+
+# add 'not null' restrictions - added after we created the tables
+def alter_not_null():
+    try:
+        cursor.execute("ALTER TABLE movie MODIFY title VARCHAR(255) NOT NULL")
+        cursor.execute("ALTER TABLE movie MODIFY year INT NOT NULL")
+        cursor.execute("ALTER TABLE person MODIFY name VARCHAR(255) NOT NULL")
+        cursor.execute("ALTER TABLE person MODIFY children INT NOT NULL DEFAULT 0")
+        cursor.execute("ALTER TABLE principal MODIFY category VARCHAR(255) NOT NULL")
+        cursor.execute("ALTER TABLE rating MODIFY total_votes INT NOT NULL")
+        cursor.execute("ALTER TABLE rating MODIFY mean_vote DECIMAL(2,1) NOT NULL")
+        cursor.execute("ALTER TABLE genre MODIFY genre VARCHAR(255) NOT NULL")
+        db.commit()
+    except:
+        print("an error occurred")
+        db.rollback()
 
 
 init_db()
+alter_not_null()
 create_indicies()
+
+cursor.close()
+db.close()

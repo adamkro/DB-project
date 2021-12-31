@@ -43,3 +43,7 @@ try:
     create_table_best_picture_winners()
 except: 
     print("an error occurred")
+    db.rollback()
+
+cursor.close()
+db.close()
